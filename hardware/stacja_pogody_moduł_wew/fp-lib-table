@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "Wyswietlacz_LCD")(type "KiCad")(uri "${KIPRJMOD}/Wyswietlacz_LCD.pretty")(options "")(descr ""))
+)
