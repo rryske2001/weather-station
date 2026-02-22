@@ -8256,7 +8256,7 @@
 			(net 2 "GND")
 			(pinfunction "SHIELD")
 			(pintype "passive")
-			(uuid "5f46679c-9136-45af-a08c-ab7209c3f463")
+			(uuid "8d0006a8-2e50-4dd1-a1a2-e67bc2394693")
 		)
 		(pad "S1" thru_hole oval
 			(at 4.32 -3.105 270)
@@ -8268,7 +8268,7 @@
 			(net 2 "GND")
 			(pinfunction "SHIELD")
 			(pintype "passive")
-			(uuid "5f46679c-9136-45af-a08c-ab7209c3f463")
+			(uuid "0e2ba2b5-be81-4a6d-bff0-ab2bb2ac4d12")
 		)
 		(pad "S1" thru_hole oval
 			(at 4.32 0.875 270)
@@ -8280,7 +8280,7 @@
 			(net 2 "GND")
 			(pinfunction "SHIELD")
 			(pintype "passive")
-			(uuid "5f46679c-9136-45af-a08c-ab7209c3f463")
+			(uuid "e9b5394c-2ba6-4a88-9e76-52a43908eb3d")
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_GCT_USB4105-xx-A_16P_TopMnt_Horizontal.step"
@@ -11195,7 +11195,7 @@
 		(property "Reference" "U6"
 			(at 0 -3 0)
 			(layer "F.SilkS")
-			(uuid "f0236ed0-e6b5-4c87-8559-d1934ccc1c23")
+			(uuid "ab807be5-e0a9-4686-bc8c-6185dd065e3b")
 			(effects
 				(font
 					(size 1 1)
@@ -11206,7 +11206,7 @@
 		(property "Value" "NRF24L01_Breakout"
 			(at 13 5 0)
 			(layer "F.Fab")
-			(uuid "c7a0aa1e-aaf7-438b-b230-bfd76f8c2dc2")
+			(uuid "aab403c5-6867-4648-8e31-bf0e32b8aab3")
 			(effects
 				(font
 					(size 1 1)
@@ -11219,7 +11219,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "581581f4-333f-4120-81c8-d90e91730f43")
+			(uuid "31f39c27-3109-405b-b484-bce971c8efc0")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11232,7 +11232,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "2903bf3a-abca-4bfe-a730-9668dc521ef1")
+			(uuid "8a882d9b-d368-4573-9364-ddd93feb9a15")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11630,7 +11630,7 @@
 		)
 		(model "${KIPRJMOD}/Wireless Radio Transmitter and Receiver nRF24L01.STEP"
 			(offset
-				(xyz 12.8 -5.8 3)
+				(xyz 12.8 -5.8 13)
 			)
 			(scale
 				(xyz 1 1 1)
@@ -14567,7 +14567,7 @@
 		(embedded_fonts no)
 		(model "${KIPRJMOD}/lcd_019.step"
 			(offset
-				(xyz 0 0 3)
+				(xyz 0 0 12)
 			)
 			(scale
 				(xyz 1 1 1)

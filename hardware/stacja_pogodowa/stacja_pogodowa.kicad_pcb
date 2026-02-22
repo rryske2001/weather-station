@@ -1514,7 +1514,7 @@
 		(embedded_fonts no)
 		(model "${KIPRJMOD}/Wireless Radio Transmitter and Receiver nRF24L01.STEP"
 			(offset
-				(xyz 12.7 -5.8 2.8)
+				(xyz 12.7 -5.8 13)
 			)
 			(scale
 				(xyz 1 1 1)

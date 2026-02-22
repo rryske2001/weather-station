@@ -406,7 +406,7 @@ void lcd_gui_task(void *pvParameters) {
                     lcdDrawRect(&lcd, 0, 0, 200, 100, BLACK);
                     lcdDrawRect(&lcd, 201, 0, 320, 100, BLACK);
                     
-                    lcdDrawString(&lcd, fx, 5, 25, (uint8_t *)"Dane z czujnika", BLACK);
+                    lcdDrawString(&lcd, fx, 5, 20, (uint8_t *)"Dane z czujnika", BLACK);
                     lcdDrawString(&lcd, fx, 215, 25, (uint8_t *)"DATA", BLACK);
                     lcdDrawString(&lcd, fx, 215, 65, (uint8_t *)"CZAS", BLACK);
                     
@@ -471,15 +471,19 @@ void lcd_gui_task(void *pvParameters) {
                 if (updateSensor || !hasData) {
                     if (!hasData) sprintf(buffer, "Temperatura: --.-- C");
                     else sprintf(buffer, "Temperatura: %.2f C", currentData.temp_hundredths / 100.0f);
-                    draw_text_buffered(5, 45, buffer, BLACK);
+                    draw_text_buffered(5, 40, buffer, BLACK);
 
                     if (!hasData) sprintf(buffer, "Wilgotnosc: --.-- %%");
                     else sprintf(buffer, "Wilgotnosc: %.2f %%", currentData.hum_x1024 / 1024.0f);
-                    draw_text_buffered(5, 65, buffer, BLACK);
+                    draw_text_buffered(5, 60, buffer, BLACK);
 
                     if (!hasData) sprintf(buffer, "Cisnienie: ---- hPa");
                     else sprintf(buffer, "Cisnienie: %.0f hPa", currentData.pressure_pa / 100.0f);
-                    draw_text_buffered(5, 85, buffer, BLACK);
+                    draw_text_buffered(5, 80, buffer, BLACK);
+
+                    if (!hasData) sprintf(buffer, "Bateria: -- %%");
+                    else sprintf(buffer, "Bateria: %.d %%", currentData.battery_percent );
+                    draw_text_buffered(5, 100, buffer, BLACK);
 
                     if (hasData) render_chart(); 
                 }

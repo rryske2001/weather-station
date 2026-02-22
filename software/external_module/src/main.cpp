@@ -30,6 +30,54 @@ void blink_led(uint8_t count, uint16_t ms) {
     }
 }
 
+uint8_t get_battery_percent(void) {
+    // 1. Ustaw wewnętrzne napięcie odniesienia (VREF) dla ADC na 1.5V
+    VREF.CTRLA = VREF_ADC0REFSEL_1V5_gc;
+    
+    // 2. Skonfiguruj ADC: 
+    // - Napięciem referencyjnym (maksymalnym) dla ADC staje się VDD (bateria)
+    // - Ustawiamy preskaler na DIV16 (bezpieczna wartość dla standardowego zegara)
+    ADC0.CTRLC = ADC_PRESC_DIV16_gc | ADC_REFSEL_VDDREF_gc; 
+    
+    // 3. Jako kanał wejściowy ADC wybieramy nasze stabilne 1.5V (INTREF)
+    ADC0.MUXPOS = ADC_MUXPOS_INTREF_gc;
+    
+    // 4. Włącz przetwornik ADC
+    ADC0.CTRLA = ADC_ENABLE_bm;
+    
+    // 5. Ślepy pomiar (Dummy read) - nota Microchip zaleca odrzucenie pierwszego 
+    // wyniku po uruchomieniu ADC lub zmianie napięcia odniesienia, aby ustabilizować układ
+    ADC0.COMMAND = ADC_STCONV_bm; // Start konwersji
+    while (!(ADC0.INTFLAGS & ADC_RESRDY_bm)); // Czekaj na koniec
+    ADC0.INTFLAGS = ADC_RESRDY_bm; // Wyczyść flagę
+    
+    // 6. Właściwy pomiar
+    ADC0.COMMAND = ADC_STCONV_bm;
+    while (!(ADC0.INTFLAGS & ADC_RESRDY_bm));
+    ADC0.INTFLAGS = ADC_RESRDY_bm;
+    
+    // Zapisz wynik (10-bitowy)
+    uint16_t adc_result = ADC0.RES;
+    
+    // 7. Natychmiast wyłącz ADC, żeby nie marnował energii podczas snu układu!
+    ADC0.CTRLA &= ~ADC_ENABLE_bm;
+    
+    // 8. Obliczenia
+    // Przekształcony wzór dający wynik od razu w miliwoltach:
+    // 1500 (bo 1.5V = 1500mV) * 1024 (rozdzielczość przetwornika) / wynik ADC
+    uint32_t vdd_mv = (1500UL * 1024UL) / adc_result;
+
+    if (vdd_mv  >= 3000) return 100;
+    
+    // Zabezpieczenie przed wartościami poniżej 0%
+    if (vdd_mv  <= 2000) return 0;
+    
+    // Właściwe przeliczenie
+    uint8_t percent = (vdd_mv  - 2000) / 10;
+    
+    return percent;
+}
+
 int main(void) {
     _PROTECTED_WRITE(CLKCTRL.MCLKCTRLB, 0); 
 
@@ -70,12 +118,13 @@ int main(void) {
         pkt.temp_hundredths = BME280_Compensate_T(raw_temp); //0.01°C
         pkt.pressure_pa    = BME280_Compensate_P(raw_press); //Pa
         pkt.hum_x1024      = BME280_Compensate_H(raw_hum);
+        pkt.battery_percent          = get_battery_percent();
         
         NRF_write_reg(0x07, 0x70); //wyczyszczenie flag statusu
 
         NRF_send_packet(&pkt); //wyślij dane
-        blink_led(3, 100); //sygnalizacja wysłania danych
-        //_delay_ms(10); //odkomentowac w przypaku zakomentowania blink_led();
+        //blink_led(3, 100); //sygnalizacja wysłania danych
+        _delay_ms(10); //odkomentowac w przypaku zakomentowania blink_led();
         NRF_write_reg(0x00,0x00); //całkowite uśpienie radia nrf na czas braku transmisji
 
         //_delay_ms(5000); //uśpienie tylko w trakcie testu komunikacji
