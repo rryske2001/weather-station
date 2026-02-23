@@ -113,10 +113,31 @@ void collect_time_task(void *pvParameters) {
     }
 }
 
-uint8_t calc_battery_percent(uint16_t mv) {
+/*uint8_t calc_battery_percent(uint16_t mv) { //liniowe przeliczanie
     if (mv >= 3000) return 100;
     if (mv <= 2000) return 0;
-    return (uint8_t)(mv-2000) / 10;
+    return (mv-2000) / 10;
+}*/
+
+uint8_t calc_battery_percent(uint16_t mv) { //nieliniowe - proba nasladowania cha-ki dla baterii alkaicznych
+    // 1. Zabezpieczenie górne (świeże baterie często mają nieco ponad 3.0V)
+    if (mv >= 2800) return 100;
+    
+    // 2. Górny przedział: 2600mV - 2800mV (spadek z 100% do 80%)
+    if (mv > 2600) return 80 + ((mv - 2600) / 10);
+    
+    // 3. Środkowy, "płaski" przedział: 2400mV - 2600mV (spadek z 80% do 50%)
+    // Bateria spędza tu najwięcej czasu swojego życia.
+    if (mv > 2400) return 50 + (((mv - 2400) * 30) / 200);
+    
+    // 4. Dolny przedział: 2200mV - 2400mV (spadek z 50% do 20%)
+    if (mv > 2200) return 20 + (((mv - 2200) * 30) / 200);
+    
+    // 5. Krytyczny spadek: 2000mV - 2200mV (spadek z 20% do 0%)
+    if (mv > 2000) return (mv - 2000) / 10;
+    
+    // 6. Zabezpieczenie dolne (poniżej 2.0V)
+    return 0;
 }
 
 // ==========================================
