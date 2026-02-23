@@ -30,7 +30,7 @@ void blink_led(uint8_t count, uint16_t ms) {
     }
 }
 
-uint8_t get_battery_percent(void) {
+uint16_t get_battery_mv(void) {
     // 1. Ustaw wewnętrzne napięcie odniesienia (VREF) dla ADC na 1.5V
     VREF.CTRLA = VREF_ADC0REFSEL_1V5_gc;
     
@@ -44,6 +44,8 @@ uint8_t get_battery_percent(void) {
     
     // 4. Włącz przetwornik ADC
     ADC0.CTRLA = ADC_ENABLE_bm;
+
+    _delay_us(100);
     
     // 5. Ślepy pomiar (Dummy read) - nota Microchip zaleca odrzucenie pierwszego 
     // wyniku po uruchomieniu ADC lub zmianie napięcia odniesienia, aby ustabilizować układ
@@ -67,15 +69,7 @@ uint8_t get_battery_percent(void) {
     // 1500 (bo 1.5V = 1500mV) * 1024 (rozdzielczość przetwornika) / wynik ADC
     uint32_t vdd_mv = (1500UL * 1024UL) / adc_result;
 
-    if (vdd_mv  >= 3000) return 100;
-    
-    // Zabezpieczenie przed wartościami poniżej 0%
-    if (vdd_mv  <= 2000) return 0;
-    
-    // Właściwe przeliczenie
-    uint8_t percent = (vdd_mv  - 2000) / 10;
-    
-    return percent;
+    return (uint16_t) vdd_mv;
 }
 
 int main(void) {
@@ -118,7 +112,7 @@ int main(void) {
         pkt.temp_hundredths = BME280_Compensate_T(raw_temp); //0.01°C
         pkt.pressure_pa    = BME280_Compensate_P(raw_press); //Pa
         pkt.hum_x1024      = BME280_Compensate_H(raw_hum);
-        pkt.battery_percent          = get_battery_percent();
+        pkt.battery_mv         = get_battery_mv();
         
         NRF_write_reg(0x07, 0x70); //wyczyszczenie flag statusu
 

@@ -113,6 +113,12 @@ void collect_time_task(void *pvParameters) {
     }
 }
 
+uint8_t calc_battery_percent(uint16_t mv) {
+    if (mv >= 3000) return 100;
+    if (mv <= 2000) return 0;
+    return (uint8_t)(mv-2000) / 10;
+}
+
 // ==========================================
 // FUNKCJE GRAFICZNE
 // ==========================================
@@ -482,7 +488,7 @@ void lcd_gui_task(void *pvParameters) {
                     draw_text_buffered(5, 80, buffer, BLACK);
 
                     if (!hasData) sprintf(buffer, "Bateria: -- %%");
-                    else sprintf(buffer, "Bateria: %.d %%", currentData.battery_percent );
+                    else sprintf(buffer, "Bateria: %d%%(%dmV)", calc_battery_percent(currentData.battery_mv), currentData.battery_mv);
                     draw_text_buffered(5, 100, buffer, BLACK);
 
                     if (hasData) render_chart(); 

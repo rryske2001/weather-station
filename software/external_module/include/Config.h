@@ -46,5 +46,5 @@ typedef struct __attribute__((packed)) {//to jest struktura 14 bajtowa, nrf moż
     int32_t temp_hundredths;
     uint32_t pressure_pa;
     uint32_t hum_x1024;
-    uint8_t battery_percent;
+    uint16_t battery_mv;
 } sensor_packet_t; //musi być taka sama na odbiorniku (ESP32)

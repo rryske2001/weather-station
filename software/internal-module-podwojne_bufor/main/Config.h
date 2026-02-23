@@ -23,7 +23,7 @@ typedef struct __attribute__((packed)) {
     int32_t temp_hundredths;
     uint32_t pressure_pa;
     uint32_t hum_x1024;
-    uint8_t battery_percent;
+    uint16_t battery_mv;
 } SensorData;
 
 // LCD Pins
