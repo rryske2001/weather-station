@@ -107,7 +107,7 @@ int main(void) {
         NRF_write_reg(0x00, 0x0A); //na nowo włączamy zasilanie radia na czas transmisji
         _delay_ms(10); //uśpienie potrzebne na uruchomienie się oscylatora układu
 
-        //Tutaj jest przyklzd kompensacji, potem wstawimy prawdziwe funkcje
+        //Tutaj jest kompensacja
         
         pkt.temp_hundredths = BME280_Compensate_T(raw_temp); //0.01°C
         pkt.pressure_pa    = BME280_Compensate_P(raw_press); //Pa
